@@ -32,7 +32,6 @@ También las relaciones **1:N**:
 - Usuario-Venta
 - Sala-Butaca
 - Película-Función
-- Consulta/Función con su Estado
 - Tipo_usuario-Usuario
 
 se resolvieron incorporando la **clave foránea correspondiente en el lado N**, evitando así cualquier necesidad de repetir grupos de datos.
@@ -61,10 +60,7 @@ Las siguientes tablas tienen una clave primaria de un solo atributo, por lo que 
 
 - `TIPO_USUARIO`
 - `USUARIO`
-- `BENEFICIO`
-- `CONSULTA`
-- `ESTADO_CONSULTA`
-- `VENTA`
+- `COMPRA`
 - `PRODUCTO`
 - `FUNCIÓN`
 - `ESTADO_FUNCIÓN`
@@ -81,7 +77,6 @@ En estas tablas se verifica que los atributos no clave dependan de la **combinac
 
 | Tabla | Clave compuesta | Atributo no clave | Justificación |
 |---|---|---|---|
-| `USUARIO_BENEFICIO` | (`id_beneficio`, `dni`) | `fecha_uso` | La fecha en que se usó el beneficio depende de **qué usuario** usó **qué beneficio**; no puede determinarse solo con `id_beneficio` ni solo con `dni`. |
 | `DETALLE_COMPRA` | (`id_compra`, `id_producto`) | `cantidad` | La cantidad vendida depende de la combinación específica venta + producto, no de la venta sola ni del producto solo. |
 | `COMPRA_FUNCION` | (`id_compra`, `id_función`) | `cantidad` | La cantidad de entradas depende de qué función se vendió dentro de qué venta puntual. |
 | `USUARIO_COMPRA` | (`id_compra`, `dni`) | — | No posee atributos no clave adicionales. La fecha pertenece a `COMPRA`, por lo que no hay dependencia parcial posible. |
