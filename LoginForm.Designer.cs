@@ -38,43 +38,44 @@
             // 
             // BIngresar
             // 
-            this.BIngresar.Location = new System.Drawing.Point(43, 258);
+            this.BIngresar.Location = new System.Drawing.Point(44, 214);
             this.BIngresar.Name = "BIngresar";
             this.BIngresar.Size = new System.Drawing.Size(78, 24);
-            this.BIngresar.TabIndex = 0;
+            this.BIngresar.TabIndex = 2;
             this.BIngresar.Text = "Ingresar";
             this.BIngresar.UseVisualStyleBackColor = true;
             this.BIngresar.Click += new System.EventHandler(this.BIngresar_Click);
             // 
             // BSalir
             // 
-            this.BSalir.Location = new System.Drawing.Point(184, 259);
+            this.BSalir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BSalir.Location = new System.Drawing.Point(185, 215);
             this.BSalir.Name = "BSalir";
             this.BSalir.Size = new System.Drawing.Size(75, 23);
-            this.BSalir.TabIndex = 1;
+            this.BSalir.TabIndex = 2;
             this.BSalir.Text = "Salir";
             this.BSalir.UseVisualStyleBackColor = true;
             this.BSalir.Click += new System.EventHandler(this.BSalir_Click);
             // 
             // TCorreo
             // 
-            this.TCorreo.Location = new System.Drawing.Point(93, 82);
+            this.TCorreo.Location = new System.Drawing.Point(94, 63);
             this.TCorreo.Name = "TCorreo";
             this.TCorreo.Size = new System.Drawing.Size(138, 20);
-            this.TCorreo.TabIndex = 2;
+            this.TCorreo.TabIndex = 0;
             // 
             // TContraseña
             // 
-            this.TContraseña.Location = new System.Drawing.Point(93, 167);
+            this.TContraseña.Location = new System.Drawing.Point(94, 130);
             this.TContraseña.Name = "TContraseña";
             this.TContraseña.PasswordChar = '*';
             this.TContraseña.Size = new System.Drawing.Size(138, 20);
-            this.TContraseña.TabIndex = 3;
+            this.TContraseña.TabIndex = 1;
             // 
             // LCorreo
             // 
             this.LCorreo.AutoSize = true;
-            this.LCorreo.Location = new System.Drawing.Point(40, 85);
+            this.LCorreo.Location = new System.Drawing.Point(41, 66);
             this.LCorreo.Name = "LCorreo";
             this.LCorreo.Size = new System.Drawing.Size(38, 13);
             this.LCorreo.TabIndex = 4;
@@ -83,7 +84,7 @@
             // LContraseña
             // 
             this.LContraseña.AutoSize = true;
-            this.LContraseña.Location = new System.Drawing.Point(26, 170);
+            this.LContraseña.Location = new System.Drawing.Point(27, 133);
             this.LContraseña.Name = "LContraseña";
             this.LContraseña.Size = new System.Drawing.Size(61, 13);
             this.LContraseña.TabIndex = 5;
@@ -91,9 +92,11 @@
             // 
             // LoginForm
             // 
+            this.AcceptButton = this.BIngresar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(315, 324);
+            this.CancelButton = this.BSalir;
+            this.ClientSize = new System.Drawing.Size(298, 294);
             this.Controls.Add(this.LContraseña);
             this.Controls.Add(this.LCorreo);
             this.Controls.Add(this.TContraseña);
@@ -102,6 +105,7 @@
             this.Controls.Add(this.BIngresar);
             this.Name = "LoginForm";
             this.Text = "LoginForm";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
