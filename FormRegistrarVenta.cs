@@ -19,6 +19,7 @@ namespace CinemaCtes
 
         private void FormRegistrarVenta_Load(object sender, EventArgs e)
         {
+            ClassEstilosHelper.AplicarEstiloTabla(DGVVentas);
             CargarDatosMaquetaComboBoxes();
             CargarGrillaVentasMaqueta();
         }

@@ -27,9 +27,7 @@ namespace CinemaCtes
             TBuscar.ForeColor = Color.Gray;
 
             // Configuración del DataGridView
-            DGVFunciones.AllowUserToAddRows = false;
-            DGVFunciones.ReadOnly = true;
-            DGVFunciones.AllowUserToDeleteRows = false;
+            ClassEstilosHelper.AplicarEstiloTabla(DGVFunciones);
 
             // Creamos las columnas de botones de acción por código
             ConfigurarColumnasBotones();

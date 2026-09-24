@@ -23,40 +23,8 @@ namespace CinemaCtes
             LFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
 
             // Llamamos a los métodos al iniciar la pantalla
-            EstilizarTablaFunciones();
+            ClassEstilosHelper.AplicarEstiloTabla(dgvFunciones);
             CargarDatosPrueba();
-        }
-        private void EstilizarTablaFunciones()
-        {
-            // Opciones de comportamiento
-            dgvFunciones.AllowUserToAddRows = false;
-            dgvFunciones.AllowUserToDeleteRows = false;
-            dgvFunciones.ReadOnly = true;
-            dgvFunciones.RowHeadersVisible = false;
-            dgvFunciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvFunciones.MultiSelect = false;
-            dgvFunciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvFunciones.BorderStyle = BorderStyle.None;
-            dgvFunciones.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvFunciones.GridColor = Color.FromArgb(38, 42, 60);
-
-            // Estilo de encabezados
-            dgvFunciones.EnableHeadersVisualStyles = false;
-            dgvFunciones.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dgvFunciones.ColumnHeadersHeight = 38;
-            dgvFunciones.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(20, 24, 40);
-            dgvFunciones.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvFunciones.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
-            dgvFunciones.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            // Estilo de las filas
-            dgvFunciones.BackgroundColor = Color.FromArgb(18, 20, 32);
-            dgvFunciones.DefaultCellStyle.BackColor = Color.FromArgb(18, 20, 32);
-            dgvFunciones.DefaultCellStyle.ForeColor = Color.FromArgb(210, 215, 230);
-            dgvFunciones.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            dgvFunciones.DefaultCellStyle.SelectionBackColor = Color.FromArgb(48, 38, 75);
-            dgvFunciones.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgvFunciones.RowTemplate.Height = 36;
         }
 
         private void CargarDatosPrueba()

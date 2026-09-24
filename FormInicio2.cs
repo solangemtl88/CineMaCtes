@@ -18,16 +18,16 @@ namespace CinemaCtes
             // Asociamos el evento Load al iniciar
             this.Load += FormInicio2_Load;
         }
+
         private void FormInicio2_Load(object sender, EventArgs e)
         {
             // Cargamos la fecha actual en la esquina superior derecha de forma dinámica
             LFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
 
             // Configuración inicial de la grilla de próximas funciones
-            DGVRecaudacionPelis.AllowUserToAddRows = false;
-            DGVRecaudacionPelis.ReadOnly = true;
-            DGVRecaudacionPelis.AllowUserToDeleteRows = false;
+            ClassEstilosHelper.AplicarEstiloTabla(DGVRecaudacionPelis);
 
+            // Cargamos registros ficticios de prueba (Modo Maqueta)
             CargarDatosMaqueta();
         }
 
@@ -72,6 +72,6 @@ namespace CinemaCtes
                     );
                 }
             }
-        }
+        } 
     }
 }

@@ -29,9 +29,7 @@ namespace CinemaCtes
             TBuscar.ForeColor = Color.Gray;
 
             // Configuración del DataGridView
-            DGVUsuarios.AllowUserToAddRows = false;
-            DGVUsuarios.ReadOnly = true;
-            DGVUsuarios.AllowUserToDeleteRows = false;
+            ClassEstilosHelper.AplicarEstiloTabla(DGVUsuarios);
 
             CBEstado.SelectedIndex = 0; // Por defecto en "Todos"
 

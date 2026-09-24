@@ -20,6 +20,9 @@ namespace CinemaCtes
 
         private void FormSalas_Load(object sender, EventArgs e)
         {
+            // Aplicamos estilos a la grilla de salas
+            ClassEstilosHelper.AplicarEstiloTabla(DGVSalas);
+
             if (!DGVSalas.Columns.Contains("CModificar"))
             {
                 DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
@@ -47,7 +50,7 @@ namespace CinemaCtes
         {
             DGVSalas.Rows.Clear();
 
-            // EJEMPLO VISUAL / MAQUETADO:
+            // MAQUETADO:
 
             // Fila de ejemplo para ver cómo queda visualmente:
             int n1 = DGVSalas.Rows.Add();

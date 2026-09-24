@@ -26,9 +26,7 @@ namespace CinemaCtes
             TBuscar.ForeColor = Color.Gray;
 
             // Configuración del DataGridView
-            DGVPeliculas.AllowUserToAddRows = false;
-            DGVPeliculas.ReadOnly = true;
-            DGVPeliculas.AllowUserToDeleteRows = false;
+            ClassEstilosHelper.AplicarEstiloTabla(DGVPeliculas);
 
             // Creamos los botones de acción por código
             ConfigurarColumnasBotones();
@@ -84,7 +82,6 @@ namespace CinemaCtes
             CBEstado.Items.Add("Inactivo");
             CBEstado.SelectedIndex = 0;
         }
-
 
         // Método para cargar datos de ejemplo en el DataGridView (Modo Maqueta)
         private void CargarTablaPeliculas()

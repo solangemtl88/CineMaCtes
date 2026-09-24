@@ -21,9 +21,8 @@ namespace CinemaCtes
         private string placeholderTexto = "Buscar por DNI, nombre o apellido...";
         private void FormClientes_Load(object sender, EventArgs e)
         {
-            DGVClientes.AllowUserToAddRows = false;
-            DGVClientes.ReadOnly = true;
-            DGVClientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            // Aplicar estilos a los DataGridViews
+            ClassEstilosHelper.AplicarEstiloTabla(DGVClientes);
 
             //  Crear la columna de botón para Modificar Correo si no existe
             if (!DGVClientes.Columns.Contains("CModificar"))

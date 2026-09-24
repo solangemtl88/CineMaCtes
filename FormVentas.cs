@@ -23,9 +23,7 @@ namespace CinemaCtes
         private void FormVentas_Load(object sender, EventArgs e)
         {
             // Configuración de la grilla
-            DGVVentas.AllowUserToAddRows = false;
-            DGVVentas.ReadOnly = true;
-            DGVVentas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            ClassEstilosHelper.AplicarEstiloTabla(DGVVentas);
 
             // 2. Crear la columna de botón Switch si no existe
             if (!DGVVentas.Columns.Contains("CEliminar"))

@@ -22,10 +22,8 @@ namespace CinemaCtes
             // Cargamos la fecha actual en la esquina superior derecha de forma dinámica
             LFecha.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
 
-            // Configuración inicial de la grilla de próximas funciones
-            DGVProximas.AllowUserToAddRows = false;
-            DGVProximas.ReadOnly = true;
-            DGVProximas.AllowUserToDeleteRows = false;
+            // Llamamos a los métodos el estilo y configuracion de la tabla al iniciar la pantalla
+            ClassEstilosHelper.AplicarEstiloTabla(DGVProximas);
 
             // Cargamos registros ficticios de prueba (Modo Maqueta)
             CargarTablaProximasFunciones();

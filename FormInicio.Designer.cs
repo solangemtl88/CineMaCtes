@@ -49,10 +49,10 @@
             this.CFin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CPelicula = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSala = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LProximasFunciones = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.LProximasFunciones = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.PHeader.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -272,17 +272,6 @@
             this.CSala.Name = "CSala";
             this.CSala.ReadOnly = true;
             // 
-            // LProximasFunciones
-            // 
-            this.LProximasFunciones.AutoSize = true;
-            this.LProximasFunciones.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.LProximasFunciones.ForeColor = System.Drawing.Color.White;
-            this.LProximasFunciones.Location = new System.Drawing.Point(38, 244);
-            this.LProximasFunciones.Name = "LProximasFunciones";
-            this.LProximasFunciones.Size = new System.Drawing.Size(236, 15);
-            this.LProximasFunciones.TabIndex = 9;
-            this.LProximasFunciones.Text = "Proximas funciones en cartelera para hoy:";
-            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Black;
@@ -306,6 +295,21 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(202, 102);
             this.panel6.TabIndex = 4;
+            // 
+            // LProximasFunciones
+            // 
+            this.LProximasFunciones.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LProximasFunciones.AutoSize = true;
+            this.LProximasFunciones.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LProximasFunciones.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.LProximasFunciones.Location = new System.Drawing.Point(34, 248);
+            this.LProximasFunciones.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.LProximasFunciones.Name = "LProximasFunciones";
+            this.LProximasFunciones.Size = new System.Drawing.Size(301, 20);
+            this.LProximasFunciones.TabIndex = 10;
+            this.LProximasFunciones.Text = "Proximas funciones en cartelera para hoy:";
             // 
             // FormInicio
             // 
@@ -365,9 +369,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CPelicula;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSala;
         private System.Windows.Forms.Label LFecha;
-        private System.Windows.Forms.Label LProximasFunciones;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label LProximasFunciones;
     }
 }
