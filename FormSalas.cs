@@ -23,25 +23,8 @@ namespace CinemaCtes
             // Aplicamos estilos a la grilla de salas
             ClassEstilosHelper.AplicarEstiloTabla(DGVSalas);
 
-            if (!DGVSalas.Columns.Contains("CModificar"))
-            {
-                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
-                CModificar.Name = "CModificar";
-                CModificar.HeaderText = "Modificar";
-                CModificar.Text = "Editar";
-                CModificar.UseColumnTextForButtonValue = true; // Hace que el texto "Editar" se muestre dentro del botón
-                DGVSalas.Columns.Add(CModificar);
-            }
-
-            if (!DGVSalas.Columns.Contains("CEliminar"))
-            {
-                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
-                CEliminar.Name = "CEliminar";
-                CEliminar.HeaderText = "Acciones";
-                CEliminar.Text = "Eliminar";
-                CEliminar.UseColumnTextForButtonValue = true; // Hace que el texto "Eliminar" se muestre dentro del botón
-                DGVSalas.Columns.Add(CEliminar);
-            }
+            // Crear las columnas de botones solo si no existen ya
+            ClassEstilosHelper.AgregarBotonesAccion(DGVSalas);
 
             CargarTablaSalas();
         }

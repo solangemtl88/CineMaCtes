@@ -22,44 +22,20 @@ namespace CinemaCtes
         private void FormFunciones_Load(object sender, EventArgs e)
         {
 
-            // Configuración inicial del buscador
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, placeholderTexto);
 
             // Configuración del DataGridView
             ClassEstilosHelper.AplicarEstiloTabla(DGVFunciones);
 
-            // Creamos las columnas de botones de acción por código
-            ConfigurarColumnasBotones();
+            // Crear las columnas de botones solo si no existen ya
+            ClassEstilosHelper.AgregarBotonesAccion(DGVFunciones);
 
             // Cargamos los ComboBox de filtros superiores
             CargarCombosFiltros();
 
             // Cargamos datos de ejemplo (Modo Maqueta)
             CargarTablaFunciones();
-        }
-
-        private void ConfigurarColumnasBotones()
-        {
-            if (!DGVFunciones.Columns.Contains("CModificar"))
-            {
-                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
-                CModificar.Name = "CModificar";
-                CModificar.HeaderText = "Modificar";
-                CModificar.Text = "Editar";
-                CModificar.UseColumnTextForButtonValue = true;
-                DGVFunciones.Columns.Add(CModificar);
-            }
-
-            if (!DGVFunciones.Columns.Contains("CEliminar"))
-            {
-                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
-                CEliminar.Name = "CEliminar";
-                CEliminar.HeaderText = "Acciones";
-                CEliminar.Text = "Eliminar";
-                CEliminar.UseColumnTextForButtonValue = true;
-                DGVFunciones.Columns.Add(CEliminar);
-            }
         }
 
         // Método para cargar los ComboBox de filtros superiores con opciones de ejemplo
@@ -255,28 +231,6 @@ namespace CinemaCtes
         private void DTPFecha_ValueChanged(object sender, EventArgs e)
         {
             AplicarFiltros();
-        }
-
-        // Evento para manejar el placeholder del TextBox de búsqueda
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            // Si el texto actual es el placeholder, lo borramos y ponemos el color de texto normal
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black;
-            }
-        }
-
-        // Evento para restaurar el placeholder si el usuario deja el campo vacío
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            // Si el usuario salió del campo y lo dejó vacío, restauramos el placeholder
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar.Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-            }
         }
     }
 }

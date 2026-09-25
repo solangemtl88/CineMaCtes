@@ -10,6 +10,7 @@ namespace CinemaCtes
 {
     public static class ClassEstilosHelper
     {
+        // Método para aplicar un estilo uniforme a los DataGridView
         public static void AplicarEstiloTabla(DataGridView dgv)
         {
             // Opciones de comportamiento
@@ -41,6 +42,61 @@ namespace CinemaCtes
             dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(48, 38, 75);
             dgv.DefaultCellStyle.SelectionForeColor = Color.White;
             dgv.RowTemplate.Height = 36;
+        }
+
+        // Método para agregar las columnas de botones de acción
+        public static void AgregarBotonesAccion(DataGridView dgv)
+        {
+            if (!dgv.Columns.Contains("CModificar"))
+            {
+                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
+                CModificar.Name = "CModificar";
+                CModificar.HeaderText = "Acción 1";
+                CModificar.Text = "Modificar";
+                CModificar.UseColumnTextForButtonValue = true;
+                dgv.Columns.Add(CModificar);
+            }
+
+            if (!dgv.Columns.Contains("CEliminar"))
+            {
+                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
+                CEliminar.Name = "CEliminar";
+                CEliminar.HeaderText = "Acción 2";
+                CEliminar.Text = "Desactivar";
+                CEliminar.UseColumnTextForButtonValue = true;
+                dgv.Columns.Add(CEliminar);
+            }
+        }
+
+        // Método para configurar el Placeholder de un TextBox
+        public static void ConfigurarPlaceholder(TextBox txt, string placeholderTexto)
+        {
+            // Estado inicial
+            if (string.IsNullOrWhiteSpace(txt.Text))
+            {
+                txt.Text = placeholderTexto;
+                txt.ForeColor = Color.Gray;
+            }
+
+            // Evento cuando entra el cursor (Enter)
+            txt.Enter += (sender, e) =>
+            {
+                if (txt.Text == placeholderTexto)
+                {
+                    txt.Text = "";
+                    txt.ForeColor = Color.White; // O Color.Black según el tema oscuro que uses
+                }
+            };
+
+            // Evento cuando sale el cursor (Leave)
+            txt.Leave += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txt.Text))
+                {
+                    txt.Text = placeholderTexto;
+                    txt.ForeColor = Color.Gray;
+                }
+            };
         }
     }
 }

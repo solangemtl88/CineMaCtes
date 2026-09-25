@@ -25,31 +25,11 @@ namespace CinemaCtes
 
         private void BConfirmar_Click(object sender, EventArgs e)
         {
-            // Validar que haya seleccionado una sala en el ComboBox
-            if (CBSala.SelectedItem == null)
-            {
-                MessageBox.Show(
-                    "Por favor, seleccione una sala.",
-                    "Campo Requerido",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                CBSala.Focus();
-                return;
-            }
+            // Validar que se haya seleccionado una  sala en el ComboBox
+            if (!ClassValidacionesHelper.ValidarComboBox(CBSala, "una sala")) return;
 
             // Validar que el TextBox de la butaca no esté vacío
-            if (string.IsNullOrWhiteSpace(TButaca.Text))
-            {
-                MessageBox.Show(
-                    "Por favor, ingrese la identificación de la butaca (ej: A1, B4).",
-                    "Campo Requerido",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                TButaca.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TButaca, "DNI")) return;
 
             // Capturamos los datos ingresados en el formulario
             string salaSeleccionada = CBSala.SelectedItem.ToString();
@@ -67,7 +47,7 @@ namespace CinemaCtes
                 MessageBoxDefaultButton.Button2
             );
 
-            // 5. Si el supervisor confirma con "Sí"
+            // Si el supervisor confirma con "Sí"
             if (confirmacion == DialogResult.Yes)
             {
                 // Aquí es donde posteriormente harás el UPDATE en la base de datos:
@@ -87,7 +67,7 @@ namespace CinemaCtes
             }
         }
 
-        private void LCorreo_Click(object sender, EventArgs e)
+        private void FormModificarButaca_Load(object sender, EventArgs e)
         {
 
         }

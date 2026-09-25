@@ -120,6 +120,7 @@
             this.Controls.Add(this.LCapacidad);
             this.Name = "FormRegistrarSala";
             this.Text = "Registrar sala";
+            this.Load += new System.EventHandler(this.FormRegistrarSala_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

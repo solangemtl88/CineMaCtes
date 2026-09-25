@@ -208,8 +208,6 @@
             this.TBuscar.Size = new System.Drawing.Size(350, 20);
             this.TBuscar.TabIndex = 0;
             this.TBuscar.TextChanged += new System.EventHandler(this.TBuscar_TextChanged);
-            this.TBuscar.Enter += new System.EventHandler(this.TBuscar_Enter);
-            this.TBuscar.Leave += new System.EventHandler(this.TBuscar_Leave);
             // 
             // panel2
             // 

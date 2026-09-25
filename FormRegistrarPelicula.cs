@@ -67,15 +67,12 @@ namespace CinemaCtes
         }
 
         // Botón Insertar: Validación de campos y cierre del formulario con DialogResult
-        // Botón Insertar: Validación de campos y cierre del formulario con DialogResult
         private void BInsertar_Click(object sender, EventArgs e)
         {
             // Validación de campos obligatorios
-            if (string.IsNullOrWhiteSpace(TTitulo.Text) || string.IsNullOrWhiteSpace(TDuracion.Text) || string.IsNullOrWhiteSpace(RTBSinopsis.Text))
-            {
-                MessageBox.Show("Por favor, complete los campos obligatorios (Título, Duración y Sinopsis).", "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TTitulo, "título")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TDuracion, "duracion")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(RTBSinopsis, "sinopsis")) return;
 
             // Validación de duración mínima (mayor a 0)
             if (Duracion <= 0) 
@@ -108,6 +105,9 @@ namespace CinemaCtes
                 MessageBox.Show("La fecha 'Hasta' no puede ser anterior a la fecha 'Desde'.", "Fechas inválidas", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            // Validar que se haya seleccionado una etiqueta en el ComboBox
+            if (!ClassValidacionesHelper.ValidarComboBox(CBEtiqueta, "una etiqueta")) return;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

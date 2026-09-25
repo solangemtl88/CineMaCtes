@@ -50,11 +50,10 @@ namespace CinemaCtes
         // Evento del botón "Insertar" para validar y cerrar el formulario con OK
         private void BInsertar_Click(object sender, EventArgs e)
         {
-            if (CBPelicula.SelectedItem == null || CBSala.SelectedItem == null)
-            {
-                MessageBox.Show("Por favor, seleccione una película y una sala.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+
+            // Validaciones individuales de ComboBox
+            if (!ClassValidacionesHelper.ValidarComboBox(CBPelicula, "una película")) return;
+            if (!ClassValidacionesHelper.ValidarComboBox(CBSala, "una sala")) return;
 
             // Validamos que la fecha de la función no sea anterior a hoy
             if (FechaFuncion < DateTime.Now.Date)

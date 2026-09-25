@@ -21,15 +21,14 @@ namespace CinemaCtes
         private void FormPeliculas_Load(object sender, EventArgs e)
         {
 
-            // Configuración inicial del buscador
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, placeholderTexto);
 
             // Configuración del DataGridView
             ClassEstilosHelper.AplicarEstiloTabla(DGVPeliculas);
 
-            // Creamos los botones de acción por código
-            ConfigurarColumnasBotones();
+            // Crear las columnas de botones solo si no existen ya
+            ClassEstilosHelper.AgregarBotonesAccion(DGVPeliculas);
 
             CargarCombosFiltros(); // Cargamos las opciones para los filtros superiores
 
@@ -37,29 +36,6 @@ namespace CinemaCtes
             CargarTablaPeliculas();
         }
 
-        // Método para configurar las columnas de botones en el DataGridView
-        private void ConfigurarColumnasBotones()
-        {
-            if (!DGVPeliculas.Columns.Contains("CModificar"))
-            {
-                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
-                CModificar.Name = "CModificar";
-                CModificar.HeaderText = "Modificar";
-                CModificar.Text = "Editar";
-                CModificar.UseColumnTextForButtonValue = true;
-                DGVPeliculas.Columns.Add(CModificar);
-            }
-
-            if (!DGVPeliculas.Columns.Contains("CEliminar"))
-            {
-                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
-                CEliminar.Name = "CEliminar";
-                CEliminar.HeaderText = "Acciones";
-                CEliminar.Text = "Eliminar";
-                CEliminar.UseColumnTextForButtonValue = true;
-                DGVPeliculas.Columns.Add(CEliminar);
-            }
-        }
 
         // Método para cargar los combos de filtros con opciones predefinidas
         private void CargarCombosFiltros()
@@ -242,26 +218,5 @@ namespace CinemaCtes
             AplicarFiltros();
         }
 
-        // Evento para manejar el placeholder en el TextBox de búsqueda
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            // Si el texto actual es el placeholder, lo borramos y ponemos el color de texto normal
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black;
-            }
-        }
-
-        // Evento para restaurar el placeholder si el usuario deja el campo vacío
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            // Si el usuario salió del campo y lo dejó vacío, restauramos el placeholder
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar.Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-            }
-        }
     }
 }

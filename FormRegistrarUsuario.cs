@@ -142,25 +142,15 @@ namespace CinemaCtes
         private void BInsertar_Click(object sender, EventArgs e)
         {
             // Validar que ningún campo esté vacío
-            if (string.IsNullOrWhiteSpace(TNombre.Text) ||
-                string.IsNullOrWhiteSpace(TApellido.Text) ||
-                string.IsNullOrWhiteSpace(TDni.Text) ||
-                string.IsNullOrWhiteSpace(TCorreo.Text) ||
-                string.IsNullOrWhiteSpace(TContraseña.Text) ||
-                string.IsNullOrWhiteSpace(TConf_contraseña.Text))
-            {
-                MessageBox.Show("Todos los campos son obligatorios.", "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TNombre, "nombre")) return;
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TApellido, "apellido")) return;
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TDni, "DNI")) return;
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TCorreo, "correo electrónico")) return;
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TContraseña, "contraseña")) return;
+            if(!ClassValidacionesHelper.ValidarCampoVacio(TConf_contraseña, "confirmación de contraseña")) return;
 
             // Validar formato básico de correo electrónico
-            if (!TCorreo.Text.Contains("@") || !TCorreo.Text.Contains("."))
-            {
-                MessageBox.Show("Debe ingresar un correo electrónico válido.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TCorreo.Focus();
-                TCorreo.SelectAll();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarEmail(TCorreo)) return;
 
             // Validar longitud del DNI (permitiendo 7 u 8 dígitos válidos)
             if (TDni.Text.Length < 7 || TDni.Text.Length > 8)
@@ -180,13 +170,7 @@ namespace CinemaCtes
             }
 
             // Validar que el primer carácter sea una letra mayúscula
-            if (!char.IsUpper(TContraseña.Text[0]))
-            {
-                MessageBox.Show("La primera letra de la contraseña debe estar en mayúscula.", "Contraseña inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TContraseña.Focus();
-                TContraseña.SelectAll();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarPrimerCaracterMayuscula(TContraseña)) return;
 
             // Validar que contenga al menos un número
             if (!TContraseña.Text.Any(char.IsDigit))
@@ -207,12 +191,7 @@ namespace CinemaCtes
             }
 
             // Validar que se haya seleccionado un tipo de usuario
-            if (CBTipo.SelectedIndex == -1)
-            {
-                MessageBox.Show("Debe seleccionar un tipo de usuario.", "Campo incompleto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                CBTipo.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarComboBox(CBTipo, "un tipo de usuario")) return;
 
             // Establecemos DialogResult en OK y cerramos
             this.DialogResult = DialogResult.OK;

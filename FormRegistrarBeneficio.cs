@@ -30,28 +30,13 @@ namespace CinemaCtes
         private void BInsertar_Click(object sender, EventArgs e)
         {
             // Validar que la descripción no esté vacía
-            if (string.IsNullOrWhiteSpace(TDescripcion.Text))
-            {
-                MessageBox.Show("Debe ingresar una descripción para el beneficio.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TDescripcion.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TDescripcion, "descripción")) return;
 
             // Validar que el descuento tenga contenido (por ejemplo, "10%" o "2x1")
-            if (string.IsNullOrWhiteSpace(TDescuento.Text))
-            {
-                MessageBox.Show("Debe ingresar el valor del descuento o promoción.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TDescuento.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TDescuento, "descuento")) return;
 
             // Validar seleccion para el tipo de descuento
-            if (CBTipo.SelectedIndex == -1 || string.IsNullOrWhiteSpace(CBTipo.Text))
-            {
-                MessageBox.Show("Debe seleccionar un tipo de descuento válido.", "Selección requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                CBTipo.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarComboBox(CBTipo, "un tipo de beneficio")) return;
 
             // Validar longitud mínima para la descripción
             if (TDescripcion.Text.Trim().Length < 5)

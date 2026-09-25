@@ -25,7 +25,10 @@ namespace CinemaCtes
             // Configuración de la grilla
             ClassEstilosHelper.AplicarEstiloTabla(DGVVentas);
 
-            // 2. Crear la columna de botón Switch si no existe
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, placeholderTexto);
+
+            //  Crear la columna de botón Switch si no existe
             if (!DGVVentas.Columns.Contains("CEliminar"))
             {
                 DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
@@ -41,10 +44,6 @@ namespace CinemaCtes
 
             // Cargamos datos de prueba (incluyendo el estado inicial "Activo")
             CargarVentasFicticias();
-
-            // Configuraciones iniciales del buscador al final para evitar disparos en falso
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
 
             cargandoFormulario = false; // Ya terminó de cargar, los filtros ya pueden operar normal
         }
@@ -195,25 +194,6 @@ namespace CinemaCtes
         private void DTPFecha_ValueChanged(object sender, EventArgs e)
         {
             FiltrarVentas();
-        }
-
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black;
-            }
-        }
-
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar.Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-                FiltrarVentas(); // Actualiza al quitar el texto
-            }
         }
     }
 }

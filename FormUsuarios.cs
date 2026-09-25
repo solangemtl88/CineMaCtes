@@ -19,14 +19,11 @@ namespace CinemaCtes
             InitializeComponent();
         }
 
-        private string placeholderTexto = "Buscar usuario...";
-
         private void FormUsuarios_Load(object sender, EventArgs e)
         {
 
-            // Configuración inicial del buscador
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, "Buscar Usuario...");
 
             // Configuración del DataGridView
             ClassEstilosHelper.AplicarEstiloTabla(DGVUsuarios);
@@ -36,25 +33,7 @@ namespace CinemaCtes
             CBTipo.SelectedIndex = 0; // Por defecto en "Todos"
 
             // Crear las columnas de botones solo si no existen ya
-            if (!DGVUsuarios.Columns.Contains("CModificar"))
-            {
-                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
-                CModificar.Name = "CModificar";
-                CModificar.HeaderText = "Acción 1";
-                CModificar.Text = "Modificar";
-                CModificar.UseColumnTextForButtonValue = true;
-                DGVUsuarios.Columns.Add(CModificar);
-            }
-
-            if (!DGVUsuarios.Columns.Contains("CEliminar"))
-            {
-                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
-                CEliminar.Name = "CEliminar";
-                CEliminar.HeaderText = "Acción 2";
-                CEliminar.Text = "Desactivar";
-                CEliminar.UseColumnTextForButtonValue = true;
-                DGVUsuarios.Columns.Add(CEliminar);
-            }
+            ClassEstilosHelper.AgregarBotonesAccion(DGVUsuarios);
 
             CargarTablaUsuarios();
         }
@@ -109,6 +88,11 @@ namespace CinemaCtes
         // Método para cargar los usuarios desde la base de datos y mostrarlos en el DataGridView
         private void CargarTablaUsuarios(string busqueda = "", string tipoFiltro = "Todos", string estadoFiltro = "Todos")
         {
+            if (busqueda == "Buscar Usuario...")
+            {
+                busqueda = "";
+            }
+
             DGVUsuarios.Rows.Clear();
 
             ConexionBD conexionBD = new ConexionBD();
@@ -119,7 +103,7 @@ namespace CinemaCtes
                     // Consulta base con filtros dinámicos (WHERE 1=1 permite concatenar condiciones fácilmente)
                     string query = @"SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.dni, u.estado, tu.descripcion AS tipo_usuario, u.id_tipo_usuario 
                              FROM usuario u 
-                             INNER JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id_tipo_usuario
+                             INNER JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id_tipo_usuario 
                              WHERE 1=1";
 
                     // Filtro por texto (Buscador general: busca en nombre, apellido, correo o DNI)
@@ -190,11 +174,11 @@ namespace CinemaCtes
             {
                 string nombreColumna = DGVUsuarios.Columns[e.ColumnIndex].Name;
 
-                // 1. LEEMOS LOS IDs DIRECTAMENTE DE LAS COLUMNAS OCULTAS (Índices 6 y 7)
+                // LEEMOS LOS IDs DIRECTAMENTE DE LAS COLUMNAS OCULTAS (Índices 6 y 7)
                 int idUsuario = Convert.ToInt32(DGVUsuarios.Rows[e.RowIndex].Cells[6].Value);
                 int idTipoUsuarioActual = Convert.ToInt32(DGVUsuarios.Rows[e.RowIndex].Cells[7].Value);
 
-                // 2. LEEMOS LOS DATOS VISIBLES SEGÚN TU ORDEN DE COLUMNAS EXACTO
+                // LEEMOS LOS DATOS VISIBLES SEGÚN TU ORDEN DE COLUMNAS EXACTO
                 string nombreActual = DGVUsuarios.Rows[e.RowIndex].Cells[0].Value?.ToString() ?? "";
                 string apellidoActual = DGVUsuarios.Rows[e.RowIndex].Cells[1].Value?.ToString() ?? "";
                 string correoActual = DGVUsuarios.Rows[e.RowIndex].Cells[2].Value?.ToString() ?? "";
@@ -316,7 +300,7 @@ namespace CinemaCtes
 
             string textoBusqueda = TBuscar.Text.Trim();
             // Si el texto es el placeholder por defecto, lo tratamos como vacío
-            if (textoBusqueda == "Buscar usuario...")
+            if (textoBusqueda == "Buscar Usuario...")
             {
                 textoBusqueda = "";
             }
@@ -327,27 +311,5 @@ namespace CinemaCtes
             CargarTablaUsuarios(textoBusqueda, tipoSeleccionado, estadoSeleccionado);
         }
 
-        // Evento para manejar el placeholder del TextBox de búsqueda
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            // Si el texto actual es el placeholder, lo borramos y ponemos el color de texto normal
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black;
-            }
-        }
-
-
-        // Evento para restaurar el placeholder si el usuario deja el campo vacío
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            // Si el usuario salió del campo y lo dejó vacío, restauramos el placeholder
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar.Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-            }
-        }
     }
 }

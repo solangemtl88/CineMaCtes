@@ -106,6 +106,7 @@
             this.Controls.Add(this.LAñadir);
             this.Name = "FormModificarPrecio";
             this.Text = "FormModificarPrecio";
+            this.Load += new System.EventHandler(this.FormModificarPrecio_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

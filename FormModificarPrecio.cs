@@ -19,16 +19,12 @@ namespace CinemaCtes
 
         private void BConfirmar_Click(object sender, EventArgs e)
         {
-            string textoNuevoPrecio = TPrecio.Text.Trim();
 
             // Validamos que no esté vacío y que sea un número válido
-            if (string.IsNullOrWhiteSpace(textoNuevoPrecio))
-            {
-                MessageBox.Show("Por favor, ingrese un nuevo precio.", "Campo vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TPrecio, "DNI")) return;
 
-            if (decimal.TryParse(textoNuevoPrecio, out decimal nuevoPrecio))
+            // Validamos que el precio sea un número decimal válido y mayor a cero
+            if (decimal.TryParse(TPrecio.Text.Trim(), out decimal nuevoPrecio))
             {
                 if (nuevoPrecio <= 0)
                 {
@@ -84,6 +80,11 @@ namespace CinemaCtes
                 // Restauramos la posición del cursor de manera segura
                 TPrecio.SelectionStart = Math.Min(seleccionInicio, TPrecio.Text.Length);
             }
+        }
+
+        private void FormModificarPrecio_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

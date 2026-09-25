@@ -45,7 +45,6 @@
             this.LButaca.Size = new System.Drawing.Size(41, 13);
             this.LButaca.TabIndex = 32;
             this.LButaca.Text = "Butaca";
-            this.LButaca.Click += new System.EventHandler(this.LCorreo_Click);
             // 
             // TButaca
             // 
@@ -120,6 +119,7 @@
             this.Controls.Add(this.LAñadir);
             this.Name = "FormModificarButaca";
             this.Text = "FormModificarButaca";
+            this.Load += new System.EventHandler(this.FormModificarButaca_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

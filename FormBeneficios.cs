@@ -27,33 +27,14 @@ namespace CinemaCtes
         private void FormBeneficios_Load(object sender, EventArgs e)
         {
 
-            // Configuración inicial del buscador
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, placeholderTexto);
 
             // Configuración del DataGridView
             ClassEstilosHelper.AplicarEstiloTabla(DGVBeneficios);
 
             // Crear las columnas de botones solo si no existen ya
-            if (!DGVBeneficios.Columns.Contains("CModificar"))
-            {
-                DataGridViewButtonColumn CModificar = new DataGridViewButtonColumn();
-                CModificar.Name = "CModificar"; 
-                CModificar.HeaderText = "Acción 1";
-                CModificar.Text = "Modificar";
-                CModificar.UseColumnTextForButtonValue = true;
-                DGVBeneficios.Columns.Add(CModificar);
-            }
-
-            if (!DGVBeneficios.Columns.Contains("CEliminar"))
-            {
-                DataGridViewButtonColumn CEliminar = new DataGridViewButtonColumn();
-                CEliminar.Name = "CEliminar";
-                CEliminar.HeaderText = "Acción 2";
-                CEliminar.Text = "Desactivar";
-                CEliminar.UseColumnTextForButtonValue = true;
-                DGVBeneficios.Columns.Add(CEliminar);
-            }
+            ClassEstilosHelper.AgregarBotonesAccion(DGVBeneficios);
         }
 
         // Evento para abrir el formulario de registro de beneficios y agregar un nuevo beneficio
@@ -209,28 +190,6 @@ namespace CinemaCtes
         private void CBEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
             FiltrarTabla();
-        }
-
-        // Evento para manejar el placeholder del TextBox de búsqueda
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            // Si el texto actual es el placeholder, lo borramos y ponemos el color de texto normal
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black; 
-            }
-        }
-
-        // Evento para restaurar el placeholder si el usuario deja el campo vacío
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            // Si el usuario salió del campo y lo dejó vacío, restauramos el placeholder
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar .Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-            }
         }
 
         // Evento para cambiar el texto del botón según el estado del beneficio

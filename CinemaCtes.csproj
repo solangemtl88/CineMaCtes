@@ -157,6 +157,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="ClassEstilosHelper.cs" />
+    <Compile Include="ClassValidacionesHelper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

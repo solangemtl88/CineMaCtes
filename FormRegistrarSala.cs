@@ -50,11 +50,10 @@ namespace CinemaCtes
 
         private void BInsertar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TNroSala.Text) || string.IsNullOrWhiteSpace(TCapacidad.Text))
-            {
-                MessageBox.Show("Todos los campos son obligatorios.", "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+
+            // Validaciones de campos vacíos
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "número de sala")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TCapacidad, "capacidad")) return;
 
             if (NroSala <= 0)
             {
@@ -89,6 +88,11 @@ namespace CinemaCtes
             TNroSala.Enabled = false; // Como es la PK manual, no dejamos modificar el número al editar
             TCapacidad.Text = capacidad.ToString();
             this.Text = "Modificar Sala";
+        }
+
+        private void FormRegistrarSala_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

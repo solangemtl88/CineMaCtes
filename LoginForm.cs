@@ -26,27 +26,11 @@ namespace CinemaCtes
         private void BIngresar_Click(object sender, EventArgs e)
         {
             // Validar campos vacíos
-            if (string.IsNullOrWhiteSpace(TCorreo.Text) || string.IsNullOrWhiteSpace(TContraseña.Text))
-            {
-                MessageBox.Show(
-                    "Debe ingresar el correo y la contraseña.",
-                    "Atención",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TCorreo, "correo")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TContraseña, "contraseña")) return;
 
             // Validar formato de correo electrónico
-            string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-
-            if (!Regex.IsMatch(TCorreo.Text, patronEmail))
-            {
-                MessageBox.Show("Por favor, ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).", "Formato Inválido", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                TCorreo.Focus();
-                TCorreo.SelectAll();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarEmail(TCorreo)) return;
 
             string rolUsuario = "";
 
@@ -71,7 +55,7 @@ namespace CinemaCtes
 
                         if (resultado != null)
                         {
-                            rolUsuario = resultado.ToString(); // Ejemplo: "Supervisor" - "Vendedor" - "Administrador"
+                            rolUsuario = resultado.ToString(); // "Supervisor" - "Vendedor" - "Administrador"
                         }
                     }
                 }

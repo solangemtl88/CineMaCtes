@@ -24,6 +24,9 @@ namespace CinemaCtes
             // Aplicar estilos a los DataGridViews
             ClassEstilosHelper.AplicarEstiloTabla(DGVClientes);
 
+            // Evento de Configuración inicial del buscador y manejo del placeholder del TextBox de búsqueda
+            ClassEstilosHelper.ConfigurarPlaceholder(TBuscar, placeholderTexto);
+
             //  Crear la columna de botón para Modificar Correo si no existe
             if (!DGVClientes.Columns.Contains("CModificar"))
             {
@@ -44,10 +47,6 @@ namespace CinemaCtes
 
             // Cargamos los datos de maqueta en la grilla
             CargarClientesFicticios();
-
-            // Configuración inicial del buscador
-            TBuscar.Text = placeholderTexto;
-            TBuscar.ForeColor = Color.Gray;
 
             cargandoFormulario = false; // Fin de la carga inicial
         }
@@ -144,23 +143,5 @@ namespace CinemaCtes
             FiltrarClientes();
         }
 
-        private void TBuscar_Enter(object sender, EventArgs e)
-        {
-            if (TBuscar.Text == placeholderTexto)
-            {
-                TBuscar.Text = "";
-                TBuscar.ForeColor = Color.Black;
-            }
-        }
-
-        private void TBuscar_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(TBuscar.Text))
-            {
-                TBuscar.Text = placeholderTexto;
-                TBuscar.ForeColor = Color.Gray;
-                FiltrarClientes();
-            }
-        }
     }
 }

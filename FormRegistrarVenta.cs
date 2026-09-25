@@ -84,19 +84,9 @@ namespace CinemaCtes
             }
 
             // Validar el campo DNI (No vacío y longitud correcta)
-            string dniTexto = TDni.Text.Trim(); 
+            string dniTexto = TDni.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(dniTexto))
-            {
-                MessageBox.Show(
-                    "El campo DNI es obligatorio.",
-                    "Error de validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-                TDni.Focus();
-                return;
-            }
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TDni, "DNI")) return;
 
             if (dniTexto.Length < 7 || dniTexto.Length > 8)
             {
@@ -110,17 +100,10 @@ namespace CinemaCtes
                 return;
             }
 
-            // Verificar que los ComboBox tengan una selección válida
-            if (CBPelicula.SelectedItem == null || CBHorario.SelectedItem == null || CBMetodoPago.SelectedItem == null)
-            {
-                MessageBox.Show(
-                    "Por favor, complete todos los campos obligatorios de la venta.",
-                    "Campos incompletos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
+            // Validaciones individuales de ComboBox
+            if (!ClassValidacionesHelper.ValidarComboBox(CBPelicula, "una película")) return;
+            if (!ClassValidacionesHelper.ValidarComboBox(CBHorario, "un horario")) return;
+            if (!ClassValidacionesHelper.ValidarComboBox(CBMetodoPago, "un método de pago")) return;
 
             // Recopilar las butacas tildadas para el mensaje
             string butacasSeleccionadas = "";
@@ -142,11 +125,11 @@ namespace CinemaCtes
 
             if (confirmacion == DialogResult.Yes)
             {
-                //SIMULACIÓN DE CÁLCULO DE MONTO (ej: $4500 por cada butaca seleccionada)
+                //SIMULACIÓN DE CÁLCULO DE MONTO 
                 int cantidadBoletos = CLBButaca.CheckedItems.Count;
                 decimal montoTotal = cantidadBoletos * 4500.00m;
 
-                //REFRESCAR LA GRILLA INFERIOR (Añadir la venta al DataTable actual)
+                //REFRESCAR LA GRILLA 
                
                 if (DGVVentas.DataSource is DataTable dtVentas)
                 {

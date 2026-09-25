@@ -23,11 +23,11 @@ namespace CinemaCtes
 
         private void BConfirmar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TCorreo.Text) || !TCorreo.Text.Contains("@"))
-            {
-                MessageBox.Show("Por favor, ingrese un correo electrónico válido.", "Correo inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // Validar que ningún campo esté vacío
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TCorreo, "correo electrónico")) return;
+
+            // Validar formato básico de correo electrónico
+            if (!ClassValidacionesHelper.ValidarEmail(TCorreo)) return;
 
             NuevoCorreoIngresado = TCorreo.Text.Trim();
             this.DialogResult = DialogResult.OK;
