@@ -52,15 +52,16 @@ namespace CinemaCtes
                     {
                         using (SqlConnection conexion = conexionBD.ObtenerConexión())
                         {
-                            string query = "INSERT INTO usuario (nombre, apellido, correo, contraseña, dni, id_tipo_usuario) VALUES (@Nombre, @Apellido, @Correo, @Contrasena, @Dni, @IdTipoUsuario)";
-
-                            using (SqlCommand comando = new SqlCommand(query, conexion))
+                            // Llamamos al procedimiento almacenado
+                            using (SqlCommand comando = new SqlCommand("SP_InsertarUsuario", conexion))
                             {
+                                comando.CommandType = CommandType.StoredProcedure;
+
                                 comando.Parameters.AddWithValue("@Nombre", formUsuario.Nombre);
                                 comando.Parameters.AddWithValue("@Apellido", formUsuario.Apellido);
-                                comando.Parameters.AddWithValue("@Dni", formUsuario.Dni);
                                 comando.Parameters.AddWithValue("@Correo", formUsuario.Correo);
                                 comando.Parameters.AddWithValue("@Contrasena", formUsuario.Contrasena);
+                                comando.Parameters.AddWithValue("@Dni", formUsuario.Dni);
                                 comando.Parameters.AddWithValue("@IdTipoUsuario", formUsuario.IdTipoUsuario);
 
                                 comando.ExecuteNonQuery();
@@ -77,9 +78,14 @@ namespace CinemaCtes
                             MessageBoxIcon.Information
                         );
                     }
+                    catch (SqlException ex)
+                    {
+                        // Capturamos específicamente los errores lanzados por el RAISERROR de SQL
+                        MessageBox.Show(ex.Message, "Aviso de Duplicidad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error al guardar en la base de datos: " + ex.Message, "Error de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Error inesperado al guardar en la base de datos: " + ex.Message, "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -100,45 +106,15 @@ namespace CinemaCtes
             {
                 using (SqlConnection conexion = conexionBD.ObtenerConexión())
                 {
-                    // Consulta base con filtros dinámicos (WHERE 1=1 permite concatenar condiciones fácilmente)
-                    string query = @"SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.dni, u.estado, tu.descripcion AS tipo_usuario, u.id_tipo_usuario 
-                             FROM usuario u 
-                             INNER JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id_tipo_usuario 
-                             WHERE 1=1";
-
-                    // Filtro por texto (Buscador general: busca en nombre, apellido, correo o DNI)
-                    if (!string.IsNullOrWhiteSpace(busqueda))
+                    using (SqlCommand comando = new SqlCommand("SP_FiltrarUsuarios", conexion))
                     {
-                        query += " AND (u.nombre LIKE @Busqueda OR u.apellido LIKE @Busqueda OR u.correo LIKE @Busqueda OR CAST(u.dni AS VARCHAR) LIKE @Busqueda)";
-                    }
+                        // Indicamos que es un procedimiento almacenado
+                        comando.CommandType = CommandType.StoredProcedure;
 
-                    // Filtro por Tipo de Usuario
-                    if (tipoFiltro != "Todos" && !string.IsNullOrEmpty(tipoFiltro))
-                    {
-                        query += " AND tu.descripcion = @TipoFiltro";
-                    }
-
-                    // Filtro por Estado
-                    if (estadoFiltro != "Todos" && !string.IsNullOrEmpty(estadoFiltro))
-                    {
-                        query += " AND u.estado = @EstadoFiltro";
-                    }
-
-                    using (SqlCommand comando = new SqlCommand(query, conexion))
-                    {
-                        // Agregamos los parámetros si se están utilizando
-                        if (!string.IsNullOrWhiteSpace(busqueda))
-                        {
-                            comando.Parameters.AddWithValue("@Busqueda", "%" + busqueda.Trim() + "%");
-                        }
-                        if (tipoFiltro != "Todos" && !string.IsNullOrEmpty(tipoFiltro))
-                        {
-                            comando.Parameters.AddWithValue("@TipoFiltro", tipoFiltro);
-                        }
-                        if (estadoFiltro != "Todos" && !string.IsNullOrEmpty(estadoFiltro))
-                        {
-                            comando.Parameters.AddWithValue("@EstadoFiltro", estadoFiltro);
-                        }
+                        // Manejo de parámetros: si están vacíos mandamos DBNull, sino el valor
+                        comando.Parameters.AddWithValue("@Busqueda", string.IsNullOrWhiteSpace(busqueda) ? (object)DBNull.Value : busqueda.Trim());
+                        comando.Parameters.AddWithValue("@TipoFiltro", string.IsNullOrEmpty(tipoFiltro) ? "Todos" : tipoFiltro);
+                        comando.Parameters.AddWithValue("@EstadoFiltro", string.IsNullOrEmpty(estadoFiltro) ? "Todos" : estadoFiltro);
 
                         using (SqlDataReader lector = comando.ExecuteReader())
                         {
@@ -200,10 +176,10 @@ namespace CinemaCtes
                             {
                                 using (SqlConnection conexion = conexionBD.ObtenerConexión())
                                 {
-                                    string query = "UPDATE usuario SET nombre = @Nombre, apellido = @Apellido, dni = @Dni, correo = @Correo, id_tipo_usuario = @IdTipoUsuario WHERE id_usuario = @Id";
-
-                                    using (SqlCommand comando = new SqlCommand(query, conexion))
+                                    using (SqlCommand comando = new SqlCommand("SP_ActualizarUsuario", conexion))
                                     {
+                                        comando.CommandType = CommandType.StoredProcedure;
+
                                         comando.Parameters.AddWithValue("@Id", idUsuario);
                                         comando.Parameters.AddWithValue("@Nombre", formModificar.Nombre);
                                         comando.Parameters.AddWithValue("@Apellido", formModificar.Apellido);
@@ -218,9 +194,14 @@ namespace CinemaCtes
                                 CargarTablaUsuarios(); // Refrescamos la grilla con los cambios
                                 MessageBox.Show("Usuario modificado correctamente en la base de datos.", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
+                            catch (SqlException ex)
+                            {
+                                // Capturamos el error controlado del RAISERROR de duplicados
+                                MessageBox.Show(ex.Message, "Aviso de Duplicidad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                             catch (Exception ex)
                             {
-                                MessageBox.Show("Error al actualizar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Error al actualizar: " + ex.Message, "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
@@ -235,33 +216,27 @@ namespace CinemaCtes
                         int filasAfectadas = 0;
                         using (SqlConnection conexion = conexionBD.ObtenerConexión())
                         {
-                            string query = "UPDATE usuario SET estado = @Estado WHERE id_usuario = @Id";
-                            using (SqlCommand comando = new SqlCommand(query, conexion))
+                            using (SqlCommand comando = new SqlCommand("SP_CambiarEstadoUsuario", conexion))
                             {
-                                comando.Parameters.AddWithValue("@Estado", nuevoEstado);
-                                comando.Parameters.AddWithValue("@Id", idUsuario);
+                                comando.CommandType = CommandType.StoredProcedure;
 
-                                // Ejecutamos la consulta de actualización de estado
+                                comando.Parameters.AddWithValue("@Id", idUsuario);
+                                comando.Parameters.AddWithValue("@Estado", nuevoEstado);
+
+                                // Ejecutamos el procedimiento almacenado
                                 filasAfectadas = comando.ExecuteNonQuery();
                             }
                         }
 
-                        if (filasAfectadas > 0)
-                        {
-                            // Actualizamos visualmente la celda 4 (Estado)
-                            DGVUsuarios.Rows[e.RowIndex].Cells[4].Value = nuevoEstado;
+                        // Como un UPDATE de estado siempre afecta filas si el ID existe, verificamos o actualizamos directamente
+                        DGVUsuarios.Rows[e.RowIndex].Cells[4].Value = nuevoEstado;
 
-                            MessageBox.Show(
-                                $"El usuario '{nombreActual}' ha sido cambiado a '{nuevoEstado}' en la base de datos.",
-                                "Estado Actualizado",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se pudo actualizar el registro (Filas afectadas: 0). Verificá el ID.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
+                        MessageBox.Show(
+                            $"El usuario '{nombreActual}' ha sido cambiado a '{nuevoEstado}' en la base de datos.",
+                            "Estado Actualizado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
                     }
                     catch (Exception ex)
                     {
@@ -270,8 +245,6 @@ namespace CinemaCtes
                 }
             }
         }
-
-
 
         // Evento cuando se escribe en la barra de búsqueda (TextBox, ej: TxtBuscador)
         private void TBuscar_TextChanged(object sender, EventArgs e)

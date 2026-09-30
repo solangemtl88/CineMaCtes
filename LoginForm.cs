@@ -28,11 +28,12 @@ namespace CinemaCtes
             // Validar campos vacíos
             if (!ClassValidacionesHelper.ValidarCampoVacio(TCorreo, "correo")) return;
             if (!ClassValidacionesHelper.ValidarCampoVacio(TContraseña, "contraseña")) return;
-
             // Validar formato de correo electrónico
             if (!ClassValidacionesHelper.ValidarEmail(TCorreo)) return;
 
+            string nombreUsuario = "";
             string rolUsuario = "";
+            bool loginExitoso = false;
 
             // Instanciamos la clase de conexión con la base de datos
             ConexionBD conexionBD = new ConexionBD();
@@ -41,21 +42,25 @@ namespace CinemaCtes
             {
                 using (SqlConnection conexion = conexionBD.ObtenerConexión())
                 {
-                    string query = @"SELECT t.id_tipo_usuario 
-                                     FROM usuario u 
-                                     INNER JOIN tipo_usuario t ON u.id_tipo_usuario = t.id_tipo_usuario 
-                                     WHERE u.correo = @Correo AND u.contraseña = @Contrasena";
-
-                    using (SqlCommand comando = new SqlCommand(query, conexion))
+                    // Usamos el procedimiento almacenado que creamos en SQL
+                    using (SqlCommand comando = new SqlCommand("SP_LoginUsuario", conexion))
                     {
+                        // Indicamos que es un Stored Procedure
+                        comando.CommandType = CommandType.StoredProcedure;
+
+                        // Pasamos los parámetros
                         comando.Parameters.AddWithValue("@Correo", TCorreo.Text.Trim());
                         comando.Parameters.AddWithValue("@Contrasena", TContraseña.Text.Trim());
 
-                        object resultado = comando.ExecuteScalar();
-
-                        if (resultado != null)
+                        using (SqlDataReader lector = comando.ExecuteReader())
                         {
-                            rolUsuario = resultado.ToString(); // "Supervisor" - "Vendedor" - "Administrador"
+                            if (lector.Read())
+                            {
+                                // Si encuentra al usuario, extraemos sus datos
+                                nombreUsuario = lector["nombre"].ToString();
+                                rolUsuario = lector["id_tipo_usuario"].ToString();
+                                loginExitoso = true;
+                            }
                         }
                     }
                 }
@@ -67,14 +72,22 @@ namespace CinemaCtes
             }
 
             // Validamos si la autenticación fue exitosa
-            if (!string.IsNullOrEmpty(rolUsuario))
+            if (loginExitoso)
             {
+
                 // Instanciamos el menú principal pasándole el rol obtenido de la BD
                 FormMenuPrincipal formPrincipal = new FormMenuPrincipal(rolUsuario);
                 formPrincipal.Show();
 
                 // Ocultar el formulario de Login
                 this.Hide();
+
+                MessageBox.Show(
+                    $"¡Bienvenido, {nombreUsuario}!",
+                    "Acceso Exitoso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             else
             {
