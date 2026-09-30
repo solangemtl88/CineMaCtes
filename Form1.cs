@@ -109,36 +109,33 @@ namespace CinemaCtes
             Application.Exit();
         }
 
+
         //Botones del menu lateral para el administrador
         private void BUsuarios_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormUsuarios());
         }
-
         private void BFunciones_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormFunciones());
         }
-
         private void BBeneficios_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormBeneficios());
         }
-
         private void BSala_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormSalas());
         }
-
         private void BPeliculas_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormPeliculas());
         }
-
         private void BInicio_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormInicio());
         }
+
 
         //Botones del menu lateral para el supervisor
         private void BInicio2_Click(object sender, EventArgs e)
@@ -154,8 +151,8 @@ namespace CinemaCtes
             AbrirFormularioHijo(new FormClientes());
         }
 
-        //Botones del menu lateral para el vendedor
 
+        //Botones del menu lateral para el vendedor
         private void BInicio3_Click(object sender, EventArgs e)
         {
             AbrirFormularioHijo(new FormInicio3());

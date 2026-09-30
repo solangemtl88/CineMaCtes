@@ -23,7 +23,7 @@ namespace CinemaCtes
             // Aplicamos estilos a la grilla de salas
             ClassEstilosHelper.AplicarEstiloTabla(DGVSalas);
 
-            // Crear las columnas de botones solo si no existen ya
+            // Crear las columnas de acción
             ClassEstilosHelper.AgregarBotonesAccion(DGVSalas);
 
             CargarTablaSalas();
@@ -33,29 +33,15 @@ namespace CinemaCtes
         {
             DGVSalas.Rows.Clear();
 
-            // MAQUETADO:
-
-            // Fila de ejemplo para ver cómo queda visualmente:
-            int n1 = DGVSalas.Rows.Add();
-            DGVSalas.Rows[n1].Cells[0].Value = 1;         // Nro sala
-            DGVSalas.Rows[n1].Cells[1].Value = 120;       // Capacidad
-            DGVSalas.Rows[n1].Cells[2].Value = "Activo";  // Estado  
-
-            int n2 = DGVSalas.Rows.Add();
-            DGVSalas.Rows[n2].Cells[0].Value = 2;
-            DGVSalas.Rows[n2].Cells[1].Value = 150;
-            DGVSalas.Rows[n2].Cells[2].Value = "Activo";
-
-            /* --- CÓDIGO REAL PARA CUANDO CONECTE A LA BASE DE DATOS ---
             ConexionBD conexionBD = new ConexionBD();
             try
             {
                 using (SqlConnection conexion = conexionBD.ObtenerConexión())
                 {
-                    string query = "SELECT nro_sala, capacidad, estado FROM sala";
-
-                    using (SqlCommand comando = new SqlCommand(query, conexion))
+                    using (SqlCommand comando = new SqlCommand("SP_ListarSalas", conexion))
                     {
+                        comando.CommandType = CommandType.StoredProcedure;
+
                         using (SqlDataReader lector = comando.ExecuteReader())
                         {
                             while (lector.Read())
@@ -64,7 +50,6 @@ namespace CinemaCtes
                                 DGVSalas.Rows[n].Cells[0].Value = lector["nro_sala"];
                                 DGVSalas.Rows[n].Cells[1].Value = lector["capacidad"];
                                 DGVSalas.Rows[n].Cells[2].Value = lector["estado"];
-                                DGVSalas.Rows[n].Cells[3].Value = lector["nro_sala"]; // Columna oculta ID
                             }
                         }
                     }
@@ -74,7 +59,6 @@ namespace CinemaCtes
             {
                 MessageBox.Show("Error al cargar las salas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            ----------------------------------------------------------- */
         }
 
         private void DGVSalas_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -83,7 +67,6 @@ namespace CinemaCtes
             {
                 string nombreColumna = DGVSalas.Columns[e.ColumnIndex].Name;
 
-                // LEEMOS EL NÚMERO DE SALA DIRECTAMENTE DE LA CELDA 0 (Visible)
                 int nroSala = Convert.ToInt32(DGVSalas.Rows[e.RowIndex].Cells[0].Value);
                 int capacidadActual = Convert.ToInt32(DGVSalas.Rows[e.RowIndex].Cells[1].Value);
                 string estadoActual = DGVSalas.Rows[e.RowIndex].Cells[2].Value?.ToString() ?? "Activo";
@@ -99,59 +82,100 @@ namespace CinemaCtes
                         {
                             int nuevaCapacidad = formModificar.Capacidad;
 
-                            // Actualizamos la celda de capacidad visualmente en la maqueta
-                            DGVSalas.Rows[e.RowIndex].Cells[1].Value = nuevaCapacidad;
+                            ConexionBD conexionBD = new ConexionBD();
+                            try
+                            {
+                                using (SqlConnection conexion = conexionBD.ObtenerConexión())
+                                {
+                                    using (SqlCommand comando = new SqlCommand("SP_ActualizarSala", conexion))
+                                    {
+                                        comando.CommandType = CommandType.StoredProcedure;
+                                        comando.Parameters.AddWithValue("@NroSala", nroSala);
+                                        comando.Parameters.AddWithValue("@Capacidad", nuevaCapacidad);
 
-                            /* 
-                             * CUANDO CONECTES A LA BASE DE DATOS MÁS ADELANTE:
-                             * string query = "UPDATE sala SET capacidad = @Capacidad WHERE nro_sala = @NroSala";
-                             */
+                                        comando.ExecuteNonQuery();
+                                    }
+                                }
 
-                            MessageBox.Show("Sala modificada correctamente.", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                CargarTablaSalas(); // Refrescamos la grilla
+                                MessageBox.Show("Sala modificada correctamente.", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error al actualizar la sala: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                 }
-                else if (nombreColumna == "CEliminar") // O botón de cambiar estado
+                else if (nombreColumna == "CEliminar")
                 {
                     string nuevoEstado = (estadoActual == "Activo") ? "Inactivo" : "Activo";
 
-                    // Actualizamos el estado visualmente en la maqueta
-                    DGVSalas.Rows[e.RowIndex].Cells[2].Value = nuevoEstado;
+                    ConexionBD conexionBD = new ConexionBD();
+                    try
+                    {
+                        using (SqlConnection conexion = conexionBD.ObtenerConexión())
+                        {
+                            using (SqlCommand comando = new SqlCommand("SP_CambiarEstadoSala", conexion))
+                            {
+                                comando.CommandType = CommandType.StoredProcedure;
+                                comando.Parameters.AddWithValue("@NroSala", nroSala);
+                                comando.Parameters.AddWithValue("@Estado", nuevoEstado);
 
-                    /* 
-                     * CUANDO CONECTES A LA BASE DE DATOS MÁS ADELANTE:
-                     * string query = "UPDATE sala SET estado = @Estado WHERE nro_sala = @NroSala";
-                     */
+                                comando.ExecuteNonQuery();
+                            }
+                        }
 
-                    MessageBox.Show($"La sala {nroSala} ha sido cambiada a estado '{nuevoEstado}'.", "Estado Actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CargarTablaSalas(); // Refrescamos la grilla
+                        MessageBox.Show($"La sala {nroSala} ha sido cambiada a estado '{nuevoEstado}'.", "Estado Actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al cambiar el estado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
 
         private void BAñadir_Click(object sender, EventArgs e)
         {
-            // Abrimos el formulario de registro de sala
             using (FormRegistrarSala formRegistrar = new FormRegistrarSala())
             {
                 DialogResult resultado = formRegistrar.ShowDialog();
 
                 if (resultado == DialogResult.OK)
                 {
-                    // Capturamos los datos que vienen del formulario hijo
                     int nroSala = formRegistrar.NroSala;
                     int capacidad = formRegistrar.Capacidad;
 
-                    // AGREGAMOS LA NUEVA SALA DIRECTAMENTE A LA GRILLA (Modo Maqueta)
-                    int n = DGVSalas.Rows.Add();
-                    DGVSalas.Rows[n].Cells[0].Value = nroSala;
-                    DGVSalas.Rows[n].Cells[1].Value = capacidad;
-                    DGVSalas.Rows[n].Cells[2].Value = "Activo"; // Estado por defecto
+                    ConexionBD conexionBD = new ConexionBD();
+                    try
+                    {
+                        using (SqlConnection conexion = conexionBD.ObtenerConexión())
+                        {
+                            using (SqlCommand comando = new SqlCommand("SP_InsertarSala", conexion))
+                            {
+                                comando.CommandType = CommandType.StoredProcedure;
+                                comando.Parameters.AddWithValue("@NroSala", nroSala);
+                                comando.Parameters.AddWithValue("@Capacidad", capacidad);
 
-                    MessageBox.Show($"Sala {nroSala} agregada correctamente (Capacidad: {capacidad}).", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                comando.ExecuteNonQuery();
+                            }
+                        }
+
+                        CargarTablaSalas(); // Refrescamos la grilla
+                        MessageBox.Show($"Sala {nroSala} agregada correctamente (Capacidad: {capacidad}).", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al registrar la sala: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
-
-
     }
 }
