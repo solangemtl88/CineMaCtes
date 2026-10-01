@@ -37,11 +37,11 @@ namespace CinemaCtes
         {
             if (sender is TextBox txtBox)
             {
-                int cursorPos = txtBox.SelectionStart;
+                int cursorPos = txtBox.SelectionStart; 
                 string soloNumeros = new string(txtBox.Text.Where(char.IsDigit).ToArray());
-
+                
                 if (txtBox.Text != soloNumeros)
-                {
+                { 
                     txtBox.Text = soloNumeros;
                     txtBox.SelectionStart = Math.Min(cursorPos, txtBox.Text.Length);
                 }
@@ -52,8 +52,8 @@ namespace CinemaCtes
         {
 
             // Validaciones de campos vacíos
-            if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "número de sala")) return;
-            if (!ClassValidacionesHelper.ValidarCampoVacio(TCapacidad, "capacidad")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "Número de sala")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TCapacidad, "Capacidad")) return;
 
             // Validación de número de sala positivo
             if (NroSala <= 0)
