@@ -73,32 +73,110 @@ namespace CinemaCtes
 
                 if (nombreColumna == "CModificar")
                 {
+                    ConexionBD conexionBD = new ConexionBD();
+                    int estadoDiagnostico = 0;
+
+                    // Diagnóstico previo ANTES de abrir el formulario de modificación
+                    try
+                    {
+                        using (SqlConnection conexion = conexionBD.ObtenerConexión())
+                        {
+                            using (SqlCommand comando = new SqlCommand("SP_VerificarEstadoSalaParaModificar", conexion))
+                            {
+                                comando.CommandType = CommandType.StoredProcedure;
+                                comando.Parameters.AddWithValue("@NroSala", nroSala);
+
+                                SqlParameter paramDiag = new SqlParameter("@EstadoDiagnostico", SqlDbType.Int);
+                                paramDiag.Direction = ParameterDirection.Output;
+                                comando.Parameters.Add(paramDiag);
+
+                                comando.ExecuteNonQuery();
+                                estadoDiagnostico = Convert.ToInt32(paramDiag.Value);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al verificar el estado de la sala: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Evaluamos los resultados del diagnóstico previo:
+                    if (estadoDiagnostico == 1)
+                    {
+                        // BLOQUEANTE: Hay una función transcurriendo AHORA
+                        MessageBox.Show(
+                            $"No se puede modificar la sala {nroSala} porque hay una función transcurriendo en este momento.",
+                            "Acción Bloqueada",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        return; // Sale y no abre nada
+                    }
+                    else if (estadoDiagnostico == 2)
+                    {
+                        // ADVERTENCIA CON ESPERA DE CONFIRMACIÓN: Tiene funciones activas futuras
+                        DialogResult respuesta = MessageBox.Show(
+                            $"La sala {nroSala} tiene funciones activas programadas.\n¿Está seguro de que desea continuar con la modificación?",
+                            "Advertencia de Funciones Activas",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning
+                        );
+
+                        if (respuesta == DialogResult.No)
+                        {
+                            return; // El usuario canceló
+                        }
+                    }
+
+                    // Si pasó los filtros previos, abrimos el formulario para modificar
                     using (FormRegistrarSala formModificar = new FormRegistrarSala())
                     {
                         formModificar.CargarDatos(nroSala, capacidadActual);
-                        DialogResult resultado = formModificar.ShowDialog();
+                        DialogResult resultadoForm = formModificar.ShowDialog();
 
-                        if (resultado == DialogResult.OK)
+                        if (resultadoForm == DialogResult.OK)
                         {
                             int nuevaCapacidad = formModificar.Capacidad;
 
-                            ConexionBD conexionBD = new ConexionBD();
+                            // 3. Verificación final de Overbooking al intentar guardar
                             try
                             {
+                                bool tieneOverbooking = false;
+
                                 using (SqlConnection conexion = conexionBD.ObtenerConexión())
                                 {
-                                    using (SqlCommand comando = new SqlCommand("SP_ActualizarSala", conexion))
+                                    using (SqlCommand comando = new SqlCommand("SP_ActualizarSalaConValidacionOverbooking", conexion))
                                     {
                                         comando.CommandType = CommandType.StoredProcedure;
                                         comando.Parameters.AddWithValue("@NroSala", nroSala);
                                         comando.Parameters.AddWithValue("@Capacidad", nuevaCapacidad);
 
+                                        SqlParameter paramOverbooking = new SqlParameter("@TieneOverbooking", SqlDbType.Bit);
+                                        paramOverbooking.Direction = ParameterDirection.Output;
+                                        comando.Parameters.Add(paramOverbooking);
+
                                         comando.ExecuteNonQuery();
+                                        tieneOverbooking = Convert.ToBoolean(paramOverbooking.Value);
                                     }
                                 }
 
-                                CargarTablaSalas(); // Refrescamos la grilla
-                                MessageBox.Show("Sala modificada correctamente.", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                if (tieneOverbooking)
+                                {
+                                    // BLOQUEANTE: Overbooking detectado
+                                    MessageBox.Show(
+                                        $"No se puede guardar la modificación.\nLa nueva capacidad ({nuevaCapacidad}) es menor a la cantidad de tickets ya vendidos en funciones activas.",
+                                        "Error de Overbooking",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error
+                                    );
+                                }
+                                else
+                                {
+                                    // ÉXITO
+                                    CargarTablaSalas();
+                                    MessageBox.Show("Sala modificada correctamente.", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -114,15 +192,60 @@ namespace CinemaCtes
                     ConexionBD conexionBD = new ConexionBD();
                     try
                     {
-                        using (SqlConnection conexion = conexionBD.ObtenerConexión())
-                        {
-                            using (SqlCommand comando = new SqlCommand("SP_CambiarEstadoSala", conexion))
-                            {
-                                comando.CommandType = CommandType.StoredProcedure;
-                                comando.Parameters.AddWithValue("@NroSala", nroSala);
-                                comando.Parameters.AddWithValue("@Estado", nuevoEstado);
+                        bool ejecutarCambio = true;
+                        bool forzarAccion = false;
 
-                                comando.ExecuteNonQuery();
+                        // Bucle por si necesitamos reintentar forzando la acción
+                        while (ejecutarCambio)
+                        {
+                            using (SqlConnection conexion = conexionBD.ObtenerConexión())
+                            {
+                                using (SqlCommand comando = new SqlCommand("SP_CambiarEstadoSala", conexion))
+                                {
+                                    comando.CommandType = CommandType.StoredProcedure;
+                                    comando.Parameters.AddWithValue("@NroSala", nroSala);
+                                    comando.Parameters.AddWithValue("@Estado", nuevoEstado);
+                                    comando.Parameters.AddWithValue("@Forzar", forzarAccion);
+
+                                    // Parámetro de salida que viene de SQL
+                                    SqlParameter paramTieneFunciones = new SqlParameter("@TieneFuncionesActivas", SqlDbType.Bit);
+                                    paramTieneFunciones.Direction = ParameterDirection.Output;
+                                    comando.Parameters.Add(paramTieneFunciones);
+
+                                    comando.ExecuteNonQuery();
+
+                                    // Leemos el valor que devolvió SQL
+                                    bool hayFunciones = Convert.ToBoolean(paramTieneFunciones.Value);
+
+                                    if (hayFunciones && !forzarAccion)
+                                    {
+                                        // ¡Alerta con espera de confirmación!
+                                        DialogResult respuesta = MessageBox.Show(
+                                            $"La sala {nroSala} tiene funciones activas programadas.\n¿Está seguro de que desea desactivarla de todas formas?",
+                                            "Advertencia de Funciones Activas",
+                                            MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Warning
+                                        );
+
+                                        if (respuesta == DialogResult.Yes)
+                                        {
+                                            // El usuario quiso seguir igual, activamos el flag de forzar y repite el while
+                                            forzarAccion = true;
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            // El usuario canceló, salimos de todo
+                                            ejecutarCambio = false;
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Si no hay funciones o ya se forzó, se completó con éxito
+                                        ejecutarCambio = false;
+                                    }
+                                }
                             }
                         }
 

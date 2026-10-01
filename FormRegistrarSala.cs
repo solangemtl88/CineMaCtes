@@ -55,6 +55,7 @@ namespace CinemaCtes
             if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "número de sala")) return;
             if (!ClassValidacionesHelper.ValidarCampoVacio(TCapacidad, "capacidad")) return;
 
+            // Validación de número de sala positivo
             if (NroSala <= 0)
             {
                 MessageBox.Show("El número de sala debe ser mayor a 0.", "Valor inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -63,9 +64,10 @@ namespace CinemaCtes
                 return;
             }
 
-            if (Capacidad <= 0)
+            // Validación de capacidad entre 100 y 200 (mayor a 99 y menor a 201)
+            if (Capacidad <= 100 || Capacidad >= 200)
             {
-                MessageBox.Show("La capacidad debe ser mayor a 0.", "Capacidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("La capacidad de la sala debe ser mayor a 99 y menor a 201 asientos.", "Capacidad fuera de rango", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 TCapacidad.Focus();
                 TCapacidad.SelectAll();
                 return;
