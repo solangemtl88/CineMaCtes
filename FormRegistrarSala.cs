@@ -52,7 +52,7 @@ namespace CinemaCtes
         {
 
             // Validaciones de campos vacíos
-            if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "Número de salaa")) return;
+            if (!ClassValidacionesHelper.ValidarCampoVacio(TNroSala, "Número de salaaaa")) return;
             if (!ClassValidacionesHelper.ValidarCampoVacio(TCapacidad, "Capacidad")) return;
 
             // Validación de número de sala positivo
