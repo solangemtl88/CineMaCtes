@@ -23,7 +23,7 @@ namespace CinemaCtes
         }
 
 
-        private string placeholderTexto = "Buscar beneficio....";
+        private string placeholderTexto = "Buscar beneficio...";
         private void FormBeneficios_Load(object sender, EventArgs e)
         {
 
