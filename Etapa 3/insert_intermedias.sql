@@ -3,6 +3,17 @@
 
 
 USE CINEMA;
+GO
+
+-- 1. LIMPIEZA DE TABLAS INTERMEDIAS Y TRANSACCIONALES
+-- (Borramos de las más hijas a las que dependen directamente de las principales)
+DELETE FROM USUARIO_BENEFICIO;
+DELETE FROM COMPRA_FUNCION;
+DELETE FROM PELICULA_ETIQUETA;
+DELETE FROM COMPRA;
+DELETE FROM FUNCION;
+DELETE FROM BUTACA;
+
 
 -- COMPRA (depende de USUARIO)
 
@@ -75,6 +86,7 @@ VALUES
 INSERT INTO COMPRA_FUNCION (cantidad, id_compra, id_funcion)
 VALUES
 (2, 1, 1),
+(1, 1, 2),
 (1, 2, 2),
 (3, 3, 3),
 (2, 4, 4),
