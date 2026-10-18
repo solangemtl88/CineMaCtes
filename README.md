@@ -15,7 +15,7 @@
 
 ---
 
-## 01 Presentación y contexto
+## <code>01</code> Presentación y contexto
 
 El crecimiento de la industria cinematográfica y la digitalización de los servicios de entretenimiento han impulsado la necesidad de sistemas que optimicen la gestión de boletos, funciones y productos asociados. 
 
@@ -23,7 +23,7 @@ El crecimiento de la industria cinematográfica y la digitalización de los serv
 
 ---
 
-## 02 Problemática
+## <code>02</code> Problemática
 
 En la gestión tradicional de cines se presentan dificultades operativas críticas:
 * Riesgo de sobreventa o asignación doble de butacas durante funciones de alta demanda.
@@ -33,13 +33,13 @@ En la gestión tradicional de cines se presentan dificultades operativas crític
 
 ---
 
-## 03 Objetivo general
+## <code>03</code> Objetivo general
 
 Diseñar e implementar un sistema de gestión de boletos de cine que permita administrar de forma integrada las operaciones de venta, reembolso, cartelera, productos del Candy, beneficios y consultas de clientes.
 
 ---
 
-## 04 Alcance del sistema
+## <code>04</code> Alcance del sistema
 
 El sistema contempla tanto la experiencia del usuario/cliente como la administración interna:
 
@@ -51,7 +51,7 @@ El sistema contempla tanto la experiencia del usuario/cliente como la administra
 
 ---
 
-## 05 Reglas de Negocio (RN)
+## <code>05</code> Reglas de Negocio (RN)
 
 1. **RN01 (Registro de clientes):** Toda compra de entradas o productos debe estar asociada obligatoriamente a un cliente registrado y autenticado por DNI y correo electrónico único.
 2. **RN02 (Gestión de stock):** La venta de productos del Candy está sujeta a la disponibilidad física en el inventario.
@@ -66,34 +66,33 @@ El sistema contempla tanto la experiencia del usuario/cliente como la administra
 
 ---
 
-## 06 Estructura del repositorio
-
+## <code>06</code> Estructura del repositorio
 ```text
 proyecto-bd1-equipo19/
 │
 ├── docs/
-│   ├── Etapa 2/
-│   │   ├── Forma Normal 1FN y 2FN.md
-│   │   ├── Modelo Entidad Relacion.png
-│   │   ├── Modelo Relacional.png
-│   │   └── forma normal 3FN.md
+│   ├── [Etapa 2](docs/Etapa%202)/
+│   │   ├── [Forma Normal 1FN y 2FN.md](docs/Etapa%202/Forma%20Normal%201FN%20y%202FN.md)
+│   │   ├── [Modelo Entidad Relacion.png](docs/Etapa%202/Modelo%20Entidad%20Relacion.png)
+│   │   ├── [Modelo Relacional.png](docs/Etapa%202/Modelo%20Relacional.png)
+│   │   └── [forma normal 3FN.md](docs/Etapa%202/forma%20normal%203FN.md)
 │   │
-│   ├── Etapa 3/
+│   ├── [Etapa 3](docs/Etapa%203)/
 │   │
-│   └── Etapa 4/
-│       └── Descripción.md
+│   └── [Etapa 4](docs/Etapa%204)/
+│       └── [Descripción.md](docs/Etapa%204/Descripción.md)
 │
 ├── sql/
-│   ├── consultas/
-│   │   ├── Comprobante.sql
-│   │   └── consultas.sql
+│   ├── [consultas](sql/consultas)/
+│   │   ├── [Comprobante.sql](sql/consultas/Comprobante.sql)
+│   │   └── [consultas.sql](sql/consultas/consultas.sql)
 │   │
-│   ├── ddl/
-│   │   └── SQL.CineMa.sql
+│   ├── [ddl](sql/ddl)/
+│   │   └── [SQL.CineMa.sql](sql/ddl/SQL.CineMa.sql)
 │   │
-│   └── dml/
-│       ├── insert_intermedias.sql
-│       └── insert_principales.sql
+│   └── [dml](sql/dml)/
+│       ├── [insert_intermedias.sql](sql/dml/insert_intermedias.sql)
+│       └── [insert_principales.sql](sql/dml/insert_principales.sql)
 │
 ├── .gitignore
 └── README.md
