@@ -70,35 +70,36 @@ El sistema contempla tanto la experiencia del usuario/cliente como la administra
 
 A continuación se detalla la organización de los directorios y archivos del proyecto:
 
-📁 **[proyecto-bd1-equipo19/](.)**
+```text
+proyecto-bd1-equipo19/
 │
-├── 📁 **[docs/](docs)**
-│   ├── 📁 **[Etapa 2](docs/Etapa%202)**
-│   │   ├── 📄 [Forma Normal 1FN y 2FN.md](docs/Etapa%202/Forma%20Normal%201FN%20y%202FN.md)
-│   │   ├── 🖼️ [Modelo Entidad Relacion.png](docs/Etapa%202/Modelo%20Entidad%20Relacion.png)
-│   │   ├── 🖼️ [Modelo Relacional.png](docs/Etapa%202/Modelo%20Relacional.png)
-│   │   └── 📄 [forma normal 3FN.md](docs/Etapa%202/forma%20normal%203FN.md)
+├── docs/
+│   ├── Etapa 2/
+│   │   ├── Forma Normal 1FN y 2FN.md
+│   │   ├── Modelo Entidad Relacion.png
+│   │   ├── Modelo Relacional.png
+│   │   └── forma normal 3FN.md
 │   │
-│   ├── 📁 **[Etapa 3](docs/Etapa%203)**
+│   ├── Etapa 3/
 │   │
-│   └── 📁 **[Etapa 4](docs/Etapa%204)**
-│       └── 📄 [Descripción.md](docs/Etapa%204/Descripción.md)
+│   └── Etapa 4/
+│       └── Descripción.md
 │
-├── 📁 **[sql/](sql)**
-│   ├── 📁 **[consultas](sql/consultas)**
-│   │   ├── 📄 [Comprobante.sql](sql/consultas/Comprobante.sql)
-│   │   └── 📄 [consultas.sql](sql/consultas/consultas.sql)
+├── sql/
+│   ├── consultas/
+│   │   ├── Comprobante.sql
+│   │   └── consultas.sql
 │   │
-│   ├── 📁 **[ddl](sql/ddl)**
-│   │   └── 📄 [SQL.CineMa.sql](sql/ddl/SQL.CineMa.sql)
+│   ├── ddl/
+│   │   └── SQL.CineMa.sql
 │   │
-│   └── 📁 **[dml](sql/dml)**
-│       ├── 📄 [insert_intermedias.sql](sql/dml/insert_intermedias.sql)
-│       └── 📄 [insert_principales.sql](sql/dml/insert_principales.sql)
+│   └── dml/
+│       ├── insert_intermedias.sql
+│       └── insert_principales.sql
 │
-├── 📄 [.gitignore](.gitignore)
-└── 📄 [README.md](README.md)
-
+├── .gitignore
+└── README.md
+```
 ---
 
 Integrantes (Grupo 19)
