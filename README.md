@@ -97,3 +97,17 @@ proyecto-bd1-equipo19/
 │
 ├── .gitignore
 └── README.md
+```
+
+Integrantes (Grupo 19)
+Acosta, Celio Elizeo — D.N.I. N° 44.718.594
+
+Batalla, Juan Cruz — D.N.I. N° 44.718.979
+
+Pérez, Rodrigo — D.N.I. N° 43.783.504
+
+Teruel Laola, Melanie Solange — D.N.I. N° 45.020.586
+
+Universidad Nacional del Nordeste (UNNE) — Facultad de Ciencias Exactas y Naturales y Agrimensura (FACENA)
+
+Cátedra: Base de Datos I — Año 2026
