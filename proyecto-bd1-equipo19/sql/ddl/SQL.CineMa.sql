@@ -34,7 +34,7 @@ CREATE TABLE COMPRA
   dni INT NOT NULL,
   id_beneficio INT NULL,
   PRIMARY KEY (id_compra),
-  FOREIGN KEY (dni) REFERENCES USUARIO(dni)
+  FOREIGN KEY (dni) REFERENCES USUARIO(dni),
   FOREIGN KEY (id_beneficio) REFERENCES BENEFICIO(id_beneficio)
 );
 
