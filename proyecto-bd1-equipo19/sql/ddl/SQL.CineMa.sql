@@ -32,8 +32,10 @@ CREATE TABLE COMPRA
   id_compra INT NOT NULL,
   fecha DATE NOT NULL,
   dni INT NOT NULL,
+  id_beneficio INT NULL,
   PRIMARY KEY (id_compra),
-  FOREIGN KEY (dni) REFERENCES USUARIO(dni)
+  FOREIGN KEY (dni) REFERENCES USUARIO(dni),
+  FOREIGN KEY (id_beneficio) REFERENCES BENEFICIO(id_beneficio)
 );
 
 CREATE TABLE PELICULA
@@ -90,27 +92,16 @@ CREATE TABLE BUTACA
   FOREIGN KEY (id_sala) REFERENCES SALA(id_sala)
 );
 
-CREATE TABLE USUARIO_BENEFICIO
-(
-  fecha_uso DATE NOT NULL,
-  id_usuario_beneficio INT NOT NULL,
-  id_beneficio INT NOT NULL,
-  dni INT NOT NULL,
-  id_compra INT NOT NULL,
-  PRIMARY KEY (id_beneficio, dni, id_usuario_beneficio),
-  FOREIGN KEY (id_beneficio) REFERENCES BENEFICIO(id_beneficio),
-  FOREIGN KEY (dni) REFERENCES USUARIO(dni),
-  FOREIGN KEY (id_compra) REFERENCES COMPRA(id_compra)
-);
-
 CREATE TABLE COMPRA_FUNCION
 (
   cantidad INT NOT NULL,
   id_compra INT NOT NULL,
   id_funcion INT NOT NULL,
-  PRIMARY KEY (id_compra, id_funcion),
+  id_butaca INT NOT NULL,
+  PRIMARY KEY (id_compra, id_funcion, id_butaca),
   FOREIGN KEY (id_compra) REFERENCES COMPRA(id_compra),
-  FOREIGN KEY (id_funcion) REFERENCES FUNCION(id_funcion)
+  FOREIGN KEY (id_funcion) REFERENCES FUNCION(id_funcion),
+  FOREIGN KEY (id_butaca) REFERENCES BUTACA(id_butaca)
 );
 
 CREATE TABLE PELICULA_ETIQUETA
