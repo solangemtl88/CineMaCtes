@@ -41,7 +41,7 @@ INSERT INTO FUNCION (id_funcion, fecha, hora, precio, id_pelicula, id_estado_fun
 (9, '2026-11-05', '19:00:00', 4000, 9, 5, 9),
 (10, '2026-11-05', '22:30:00', 5000, 10, 1, 10);
 
--- 4. COMPRA (10 compras de usuarios con o sin beneficio)
+-- 4. COMPRA (11 compras de usuarios con o sin beneficio)
 INSERT INTO COMPRA (id_compra, fecha, dni, id_beneficio) VALUES
 (1, '2026-10-25', 30111222, 1),  -- Juan Pérez, Sin beneficio
 (2, '2026-10-25', 31222333, 2),  -- María Gómez, Estudiante
@@ -52,9 +52,11 @@ INSERT INTO COMPRA (id_compra, fecha, dni, id_beneficio) VALUES
 (7, '2026-10-28', 36777888, 6),  -- Diego Sánchez, Galicia
 (8, '2026-10-28', 37888999, 1),  -- Laura Díaz, Sin beneficio
 (9, '2026-10-29', 38999000, 9),  -- Gonzalo Romero, Cumpleañero
-(10, '2026-10-29', 39000111, 7); -- Camila Alvarez, Mercado Pago
+(10, '2026-10-29', 39000111, 7), -- Camila Alvarez, Mercado Pago
+(11, '2026-10-30', 30111222, 5);  -- Juan Pérez, 2x1 Martes
 
--- 5. COMPRA_FUNCION (10 registros de tickets vendidos)
+
+-- 5. COMPRA_FUNCION (11 registros de tickets vendidos)
 INSERT INTO COMPRA_FUNCION (cantidad, id_compra, id_funcion, id_butaca) VALUES
 (1, 1, 1, 1),
 (1, 2, 2, 3),
@@ -65,5 +67,6 @@ INSERT INTO COMPRA_FUNCION (cantidad, id_compra, id_funcion, id_butaca) VALUES
 (1, 7, 7, 9),
 (1, 8, 8, 10),
 (2, 9, 9, 2),
-(1, 10, 10, 4);
+(1, 10, 10, 4),
+(1, 11, 2, 4);
 GO
