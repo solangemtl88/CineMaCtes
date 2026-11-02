@@ -1,7 +1,6 @@
 
 # Etapa 1 — Requerimientos del sistema
 
-**Proyecto:** CineMaCtes
 
 ## 1. Introducción
 
