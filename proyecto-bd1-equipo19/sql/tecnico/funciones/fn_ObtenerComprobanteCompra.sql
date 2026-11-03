@@ -41,7 +41,7 @@ RETURN(
     JOIN PELICULA AS p ON f.id_pelicula = p.id_pelicula
     LEFT JOIN BENEFICIO AS b ON c.id_beneficio = b.id_beneficio
     
-    WHERE (@id_compra IS NULL OR c.id_compra = @id_compra)
+     WHERE c.id_compra = ISNULL(@id_compra, c.id_compra)
 );
 GO
 
