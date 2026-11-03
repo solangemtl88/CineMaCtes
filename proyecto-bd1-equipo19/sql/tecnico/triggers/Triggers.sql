@@ -1,12 +1,68 @@
 
+USE CINEMA;
+GO
+
+-- Registro de auditoría para cambios de precio en funciones
+-- Detecta cada actualización en el campo precio de la tabla FUNCION
+-- y guarda automáticamente el precio anterior, el nuevo, el usuario y la fecha.
+
+CREATE OR ALTER TRIGGER trg_AuditoriaPrecioFuncion
+ON FUNCION
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Registrar solo si hubo cambio en el precio
+    IF UPDATE(precio)
+    BEGIN
+        INSERT INTO AUDITORIA_PRECIO_FUNCION (
+            id_funcion, 
+            precio_anterior, 
+            precio_nuevo, 
+            fecha_modificacion, 
+            usuario, 
+            tipo_operacion
+        )
+        SELECT 
+            d.id_funcion,
+            d.precio AS precio_anterior,
+            i.precio AS precio_nuevo,
+            GETDATE(),
+            SYSTEM_USER,
+            'UPDATE'
+        FROM deleted d
+        INNER JOIN inserted i ON d.id_funcion = i.id_funcion
+        WHERE d.precio <> i.precio;
+    END
+END;
+GO
+
+
+-- 1. CASO EXITOSO Actualizacion del precio de una función existente
+UPDATE FUNCION 
+SET precio = 6000 
+WHERE id_funcion = 201;
+PRINT '-> Prueba 1 (Cambio de precio): ÉXITO - Debe registrar en auditoría.';
+GO
+
+-- 2. CASO ERRONEO (CONTROL / SIN CAMBIO): Se intenta "actualizar" con el mismo precio
+UPDATE FUNCION 
+SET precio = 6000 
+WHERE id_funcion = 201;
+
+PRINT '-> Prueba 2 (Mismo precio): ÉXITO - NO debe agregar ningún registro nuevo.';
+GO
+
+-- 3. Verificacion: Consulta a la tabla para confirmar que solo hay 1 registro generado
+SELECT * FROM AUDITORIA_PRECIO_FUNCION;
+GO
+
+
 
 -- Restriccion de un solo beneficio por transaccion de compra
 -- Asegura que para un mismo id_compra no pueda existir más de un registro de beneficio aplicado,
 -- rechazando cualquier intento posterior de asociarle
-
-
-USE CINEMA;
-GO
 
 CREATE OR ALTER TRIGGER trg_UnicoBeneficioPorUsuarioFecha
 ON COMPRA
@@ -35,10 +91,10 @@ BEGIN
     END
 END;
 GO
+
 -- LOTE DE PRUEBAS PARA APLICAR BENEFICIO
 
-USE CINEMA;
-GO
+DELETE FROM COMPRA WHERE id_compra IN (101, 102, 103);
 
 -- 1. CASO EXITOSO: Compra sin beneficio (id_beneficio = NULL)
 -- Debe insertarse correctamente.
@@ -218,7 +274,6 @@ VALUES (201, '2026-12-01', '18:00:00', 5000, 1, 1, 1);
 -- El trigger debe bloquearla y mostrar el mensaje de conflicto en rojo.
 INSERT INTO FUNCION (id_funcion, fecha, hora, precio, id_pelicula, id_estado_funcion, id_sala)
 VALUES (202, '2026-12-01', '19:30:00', 5000, 2, 1, 1);
-
-
+GO
 
 
