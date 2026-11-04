@@ -113,3 +113,14 @@ CREATE TABLE PELICULA_ETIQUETA
   FOREIGN KEY (id_etiqueta) REFERENCES ETIQUETA(id_etiqueta)
 );
 
+--TABLA DE AUDITORIA
+CREATE TABLE AUDITORIA_PRECIO_FUNCION (
+    id_auditoria INT IDENTITY(1,1) PRIMARY KEY,
+    id_funcion INT NOT NULL,
+    precio_anterior DECIMAL(10,2),
+    precio_nuevo DECIMAL(10,2),
+    fecha_modificacion DATETIME DEFAULT GETDATE(),
+    usuario VARCHAR(100) DEFAULT SYSTEM_USER,
+    tipo_operacion VARCHAR(10)
+);
+GO
